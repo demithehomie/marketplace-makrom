@@ -1,12 +1,12 @@
 # Seja bem-vindo a Makrom!
 
 ## Neste projeto vocês constuirão um marketplace com Ionic, Angular e Typescript no frontend, e Nest.js, Prisma e SQL (PostgreSQL ou MySQL) no backend. 
-## O Asaas será novamente onde será feita a integração de pagamentos.
+## O Asaas será novamente onde será feita a integração de pagamentos. <hr>
 
 
-### Deploy poderá ser feito via Netlify, Firebase no frontend, e Railway, Render no backend.
+### Deploy poderá ser feito via Netlify, Firebase no frontend, e Railway, Render no backend. <hr>
 
-### Princípios para a construção de um Marketplace <hr>
+### Princípios para a construção de um Marketplace 
 
 ### * Intermediação de produtos e/ou servicos
 ### * Split de pagamentos
@@ -16,6 +16,7 @@
 ### * Armazenamento dos dados de clientes/lojistas em um banco de dados (Dados cadastrais, dados de compra, dados de venda, dados de endereço e GPS, dados dos lojistas, dados dos prestadores de serviço )
 ### * Múltiplas formas de pagamento
 
+<hr>
 
 @AlcaponeAnon líderes dos estagiários no backend
 
