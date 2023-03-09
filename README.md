@@ -4,7 +4,7 @@
 ## O Asaas será novamente onde será feita a integração de pagamentos.
 
 
-# Deploy poderá ser feito via Netlify, FIrebase no frontend, e Railway, Render no backend.
+### Deploy poderá ser feito via Netlify, Firebase no frontend, e Railway, Render no backend.
 
 ## Princípios para a construção de um Marketplace
 
