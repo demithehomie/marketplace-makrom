@@ -1,32 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { createTransport } from 'nodemailer';
-import { ConfigService } from '@nestjs/config';
+import { createTransport, Transporter  } from 'nodemailer';
+import * as dotenv from 'dotenv';
 
 @Injectable()
 export class EmailService {
-  private transporter: any;
+  private transporter: Transporter;
 
-  constructor(private configService: ConfigService) {
-    // Configurar o transporter com os valores do arquivo .env
+  constructor() {
+    dotenv.config();
     this.transporter = createTransport({
-      host: this.configService.get('SMTP_HOST'),
-      port: this.configService.get('SMTP_PORT'),
-      secure: this.configService.get('SMTP_SECURE'),
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: process.env.SMTP_SECURE === 'true',
       auth: {
-        user: this.configService.get('SMTP_USER'),
-        pass: this.configService.get('SMTP_PASS'),
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     });
   }
 
-  async sendEmail(to: string, subject: string, text: string) {
+  async sendEmail(to: string, subject: string, html: string): Promise<void> {
     try {
       // Enviar o e-mail
       await this.transporter.sendMail({
-        from: this.configService.get('SMTP_USER'),
+        from: process.env.SMTP_USER,
         to,
         subject,
-        text,
+        html,
       });
       console.log(`E-mail enviado para ${to} com sucesso!`);
     } catch (err) {

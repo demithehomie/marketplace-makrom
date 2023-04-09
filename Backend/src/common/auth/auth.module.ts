@@ -26,8 +26,7 @@ import { ConfigService } from '@nestjs/config';
     JwtStrategy,
     PrismaService,
     TokenController,
-    EmailService,
-    ConfigService
+    EmailService
   ],
   exports: [
     AuthService,

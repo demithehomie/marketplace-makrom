@@ -27,7 +27,8 @@ import { IonicCorsMiddleware } from 'middlewares/ionic-cors.middleware';
   providers: [
     AppService,
     PrismaService,
-    IonicCorsMiddleware
+    IonicCorsMiddleware,
+    
   ],
   exports: [
     PrismaService

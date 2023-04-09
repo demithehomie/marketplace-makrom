@@ -4,6 +4,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { AuthService } from 'src/common/auth/auth.service';
 import { JwtAuthGuard } from 'src/common/auth/jwt-auth.guard';
+import { EmailService } from 'src/common/2fa/email/email.service';
+import * as dotenv from 'dotenv';
 
 @Controller('client')
 
@@ -11,8 +13,11 @@ export class ClientController {
     
     constructor(
         private readonly prisma: PrismaService,
-        private authService: AuthService
-    ) {}
+        private authService: AuthService,
+        private emailService: EmailService
+    ) {
+        dotenv.config();
+    }
 
     
     @UseGuards(JwtAuthGuard)
@@ -140,10 +145,13 @@ export class ClientController {
     }
 
     @Post('email-token')
-        async emailtoken(@Body()email: string, token: string) {
-        return this.authService.enviarTokenPorEmail(email, token);    
+        async emailtoken(@Body()email: string) {
+        return this.authService.enviarTokenPorEmail(email);    
     }
 
-
+    @Post('email-service')
+        async emailservice(@Body()to: string, @Body()subject: string, @Body()html: string) {
+        return this.emailService.sendEmail(to, subject, html);    
+    }
 
 }

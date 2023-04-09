@@ -6,6 +6,7 @@ import { TokenController } from '../token/token.controller';
 import { EmailService } from '../2fa/email/email.service';
 import * as speakeasy from 'speakeasy';
 import { jwtConstants } from './constants';
+import * as dotenv from 'dotenv';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private token: TokenController,
     private emailService: EmailService
-  ) {}
+  ) {
+    dotenv.config();
+  }
 
   async validateClient(email: string, senha: string): Promise<any> {
     const client = await this.prisma.getClient().client.findUnique({ where: { email } });
@@ -49,7 +52,8 @@ export class AuthService {
     };
   }
 
-  async enviarTokenPorEmail(email: string, token: string) {
+  async enviarTokenPorEmail(email: string) {
+    const token = String;
     try {
       // Gerar o texto do e-mail com o token
       const text = `Seu token de autenticação é: ${token}`;
