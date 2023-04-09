@@ -138,4 +138,12 @@ export class ClientController {
         async login(@Request() req) {
         return this.authService.login(req.client);    
     }
+
+    @Post('email-token')
+        async emailtoken(@Body()email: string, token: string) {
+        return this.authService.enviarTokenPorEmail(email, token);    
+    }
+
+
+
 }

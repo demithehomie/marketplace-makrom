@@ -8,6 +8,8 @@ import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
+import { EmailService } from '../2fa/email/email.service';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -23,7 +25,9 @@ import { LocalStrategy } from './local.strategy';
     LocalStrategy,
     JwtStrategy,
     PrismaService,
-    TokenController
+    TokenController,
+    EmailService,
+    ConfigService
   ],
   exports: [
     AuthService,

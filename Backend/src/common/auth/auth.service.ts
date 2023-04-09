@@ -3,6 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { TokenController } from '../token/token.controller';
+import { EmailService } from '../2fa/email/email.service';
+import * as speakeasy from 'speakeasy';
+import { jwtConstants } from './constants';
 
 @Injectable()
 export class AuthService {
@@ -10,6 +13,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private token: TokenController,
+    private emailService: EmailService
   ) {}
 
   async validateClient(email: string, senha: string): Promise<any> {
@@ -45,4 +49,31 @@ export class AuthService {
     };
   }
 
+  async enviarTokenPorEmail(email: string, token: string) {
+    try {
+      // Gerar o texto do e-mail com o token
+      const text = `Seu token de autenticação é: ${token}`;
+
+      // Enviar o e-mail com o token
+      await this.emailService.sendEmail(email, 'Token de Autenticação', text);
+    } catch (err) {
+      console.error(`Erro ao enviar e-mail com token: ${err.message}`);
+      throw err;
+    }
+  }
+
+  async verificarToken(email: string, token: string): Promise<boolean> {
+    // Lógica de verificação do token aqui
+
+    // Exemplo de verificação usando a biblioteca speakeasy
+    const secret = jwtConstants.secret; // Substitua pelo seu próprio segredo
+    const isValid = speakeasy.totp.verify({
+      secret,
+      encoding: 'base32',
+      token,
+      window: 1,
+    });
+
+    return isValid;
+  }
 }

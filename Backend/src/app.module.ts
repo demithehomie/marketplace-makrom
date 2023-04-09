@@ -22,7 +22,7 @@ import { IonicCorsMiddleware } from 'middlewares/ionic-cors.middleware';
     SubscriptionsModule
   ],
   controllers: [
-    AppController
+    AppController,
   ],
   providers: [
     AppService,
