@@ -5,8 +5,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 require('dotenv').config();
-const EMAIL_USER = process.env.EMAIL_USER;
-const EMAIL_PASS = process.env.EMAIL_PASS;
 @Injectable()
 export class EmailService {
   constructor() {}
@@ -22,8 +20,8 @@ export class EmailService {
       port: 465,
       secure: true,
       auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
     return await transporter.sendMail(options);
