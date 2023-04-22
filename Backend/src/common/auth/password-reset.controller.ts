@@ -29,7 +29,7 @@ export class PasswordResetController {
 
   @Post('auth/password-reset/confirm')
   async confirmPasswordReset(@Body() { resetPasswordToken, token, password }) {
-    const user = await this.prismaService.getClient().client.findUnique({ where: { resetPasswordToken } });
+    const user = await this.prismaService.getClient().client.findUnique({ where: { resetPasswordToken: token } });
     if (!user || user.resetPasswordTokenExpiresAt < new Date()) {
       throw new Error('Token inválido ou expirado');
     }

@@ -69,6 +69,9 @@ CREATE UNIQUE INDEX "Client_usuario_key" ON "Client"("usuario");
 CREATE UNIQUE INDEX "Client_email_key" ON "Client"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Client_resetPasswordToken_key" ON "Client"("resetPasswordToken");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Provider_usuario_key" ON "Provider"("usuario");
 
 -- CreateIndex
