@@ -1,66 +1,66 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-datasource db {
-  provider = "postgresql"
-  url = "postgres://projeto_final_irbe_user:WqfwiITqE6Skulq80hg0tTZdlsmUW46d@dpg-cgf04apmbg50899f1keg-a.oregon-postgres.render.com/projeto_final_irbe"
-}
 
 generator client {
   provider = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-1.0.x"]  
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Client {
-  id Int @id @default(autoincrement())
-  usuario String @unique
-  senha String 
-  nome String 
-  cpf String
-  email String @unique
-  telefone Int 
-  celular Int
-  nascismento Int
-  endereco String
-  numero Int
-  bairro String
-  complemento String
-  cidade String
-  estado String
-  cep Int
-  twoFactorSecret String @default("0")
-  twoFactorEnabled Boolean @default(false)
-  verified Boolean @default(false)
-  resetPasswordToken String  @unique @default("0")
+  id                          Int      @id @default(autoincrement())
+  usuario                     String   @unique
+  senha                       String
+  nome                        String
+  cpf                         String
+  email                       String   @unique
+  telefone                    Int
+  celular                     Int
+  nascismento                 Int
+  endereco                    String
+  numero                      Int
+  bairro                      String
+  complemento                 String
+  cidade                      String
+  estado                      String
+  cep                         Int
+  twoFactorSecret             String   @default("0")
+  twoFactorEnabled            Boolean  @default(false)
+  verified                    Boolean  @default(false)
+  resetPasswordToken          String   @unique @default("0")
   resetPasswordTokenExpiresAt DateTime @default(now())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
 }
 
 model Provider {
-  id Int @id @default(autoincrement())
-  usuario String @unique
-  senha String
-  nome String
+  id           Int      @id @default(autoincrement())
+  usuario      String   @unique
+  senha        String
+  nome         String
   razao_social String
-  cnpj String @unique
-  email String @unique
-  telefone Int
-  celular Int
-  endereco String
-  numero Int
-  bairro String
-  complemento String
-  cidade String
-  estado String
-  cep Int 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  cnpj         String   @unique
+  email        String   @unique
+  telefone     Int
+  celular      Int
+  endereco     String
+  numero       Int
+  bairro       String
+  complemento  String
+  cidade       String
+  estado       String
+  cep          Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Token {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  hash  String
+  hash      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
