@@ -9,7 +9,8 @@ import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 import { EmailService } from './email.service';
-import { ConfigService } from '@nestjs/config';
+import { AuthController } from './auth.controller';
+import { TwoFactorAuthService } from './two-factor.auth.service';
 
 @Module({
   imports: [
@@ -20,13 +21,17 @@ import { ConfigService } from '@nestjs/config';
       signOptions: { expiresIn: '600s'}
     }),
   ],
+  controllers: [
+    AuthController,
+  ],
   providers: [
     AuthService,
     LocalStrategy,
     JwtStrategy,
     PrismaService,
     TokenController,
-    EmailService
+    EmailService,
+    TwoFactorAuthService
   ],
   exports: [
     AuthService,
