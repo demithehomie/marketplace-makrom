@@ -18,7 +18,10 @@ export class PasswordResetController {
       throw new Error('Usuário não encontrado');
     }
     const speakeasy = require('speakeasy');
-    const token = speakeasy.generateSecret({ length: 20 }).base32;
+    const token = speakeasy.totp({
+      secret: speakeasy.generateSecret({ length: 20 }).base32,
+      digits: 6
+    });
     await this.prismaService.getClient().client.update({
       where: { email: user.email },
       data: { resetPasswordToken: token, resetPasswordTokenExpiresAt: new Date(Date.now() + 3600000) }, // expires in 1 hour
