@@ -3,7 +3,10 @@ import * as nodemailer from 'nodemailer';
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import * as path from 'path';
+
 require('dotenv').config();
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASS = process.env.EMAIL_PASS;
 @Injectable()
 export class EmailService {
   constructor() {}
@@ -19,8 +22,8 @@ export class EmailService {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        user: EMAIL_USER,
+        pass: EMAIL_PASS,
       },
     });
     return await transporter.sendMail(options);
@@ -29,7 +32,7 @@ export class EmailService {
   async sendTwoFactorToken(email, token) {
     const html = `<html><body><p>Seu código de verificação em dois fatores é: ${token}</p></body></html>`;
     const options = {
-      from: process.env.EMAIL_USER,
+      from: EMAIL_USER,
       to: email,
       subject: 'Seu código de verificação em dois fatores',
       html,
@@ -51,7 +54,7 @@ export class EmailService {
     const html = this.compileTemplate(template, { code: token });
 
     const options = {
-      from: process.env.EMAIL_USER,
+      from: EMAIL_USER,
       to: email,
       subject: 'Redefinir senha',
       html,
