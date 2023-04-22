@@ -29,12 +29,14 @@ export class EmailService {
   }
 
   async sendResetPasswordToken(email, token) {
-    const html = `<html><body><p>Seu código para redefinição de senha é: ${token}</p></body></html>`;
     const options = {
       from: 'allafsendmail@gmail.com',
       to: email,
       subject: 'Redefinir senha',
-      html,
+      template: 'email',
+      context: {
+        code: token,
+      },
     };
     return await this.sendEmail(options);
   }
