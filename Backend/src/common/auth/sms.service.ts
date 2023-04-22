@@ -21,8 +21,8 @@ export class SmsService {
       'https://app.websms.com.br/sms/shortcode/routes/sms.php',
       {
         mensagem,
-        acao: data.acao, //'enviar',
-        numero: data.numero, //'22992248416',
+        acao: data.acao,
+        numero: data.numero,
         hash: HASH_SMS_MOBILE,
       },
     );
@@ -39,11 +39,9 @@ export class SmsService {
   ): Promise<boolean> {
     const pendingCode = this.pendingCodes[phoneNumber];
     if (pendingCode === verificationCode) {
-      // Código de verificação válido, limpar pendingCodes e retornar verdadeiro
       delete this.pendingCodes[phoneNumber];
       return true;
     } else {
-      // Código de verificação inválido, retornar falso
       return false;
     }
   }

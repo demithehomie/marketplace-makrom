@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from './email.service';
 import { SmsService } from './sms.service';
+import { Sms } from './sms';
 
 @Controller()
 export class PasswordResetController {
@@ -46,7 +47,7 @@ export class PasswordResetController {
     if (!user || user.resetPasswordTokenExpiresAt < new Date()) {
       throw new Error('Token inválido ou expirado');
     }
-    const passwordHash = await bcrypt.hashSync(user.senha, 8);
+    const passwordHash = await bcrypt.hash(password, 8);
     await this.prismaService.getClient().client.update({
       where: { email: user.email },
       data: {
@@ -59,26 +60,20 @@ export class PasswordResetController {
   }
 
   @Post('auth/password-reset/sms-request')
-  async sendVerificationCode(@Body() data: Sms): Promise<string> {
-    const phoneNumber = data.numero[0];
+  async sendSms(@Body() data: Sms): Promise<string> {
     const verificationCode = await this.smsService.sendSms(data);
-    this.pendingCodes[phoneNumber] = verificationCode;
-    return 'Código de verificação enviado com sucesso.';
+    return verificationCode;
   }
 
   @Post('auth/password-reset/sms-confirm')
   async validateVerificationCode(
-    @Body() payload: { phoneNumber: string; verificationCode: string },
-  ): Promise<{ valid: boolean }> {
-    const { phoneNumber, verificationCode } = payload;
-    const pendingCode = this.pendingCodes[phoneNumber];
-    if (pendingCode === verificationCode) {
-      // Código de verificação válido, limpar pendingCodes e retornar verdadeiro
-      delete this.pendingCodes[phoneNumber];
-      return { valid: true };
-    } else {
-      // Código de verificação inválido, retornar falso
-      return { valid: false };
-    }
+    @Body('phoneNumber') phoneNumber: string,
+    @Body('verificationCode') verificationCode: string,
+  ): Promise<boolean> {
+    const isValid = await this.smsService.validateVerificationCode(
+      phoneNumber,
+      verificationCode,
+    );
+    return isValid;
   }
 }
