@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
-dotenv.config();
-
+import * as nodemailer from 'nodemailer';
 @Injectable()
 export class EmailService {
   constructor() {}
@@ -13,8 +10,8 @@ export class EmailService {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        user: 'allafsendmail@gmail.com',
+        pass: 'uvufcxabcajebfjj',
       },
     });
     return await transporter.sendMail(options);
@@ -23,7 +20,7 @@ export class EmailService {
   async sendTwoFactorToken(email, token) {
     const html = `<html><body><p>Seu código de verificação em dois fatores é: ${token}</p></body></html>`;
     const options = {
-      from: process.env.EMAIL_USER,
+      from: 'allafsendmail@gmail.com',
       to: email,
       subject: 'Seu código de verificação em dois fatores',
       html,
@@ -34,7 +31,7 @@ export class EmailService {
   async sendResetPasswordToken(email, token) {
     const html = `<html><body><p>Seu código para redefinição de senha é: ${token}</p></body></html>`;
     const options = {
-      from: process.env.EMAIL_USER,
+      from: 'allafsendmail@gmail.com',
       to: email,
       subject: 'Redefinir senha',
       html,
