@@ -20,7 +20,7 @@ export class PasswordResetController {
     const speakeasy = require('speakeasy');
     const token = speakeasy.generateSecret({ length: 20 }).base32;
     await this.prismaService.getClient().client.update({
-      where: { id: user.id },
+      where: { email: user.email },
       data: { resetPasswordToken: token, resetPasswordTokenExpiresAt: new Date(Date.now() + 3600000) }, // expires in 1 hour
     });
     await this.emailService.sendResetPasswordToken(user.email, token);
@@ -28,15 +28,15 @@ export class PasswordResetController {
   }
 
   @Post('auth/password-reset/confirm')
-  async confirmPasswordReset(@Body() { resetPasswordToken, token, password }) {
+  async confirmPasswordReset(@Body() { token, password }) {
     const user = await this.prismaService.getClient().client.findUnique({ where: { resetPasswordToken: token } });
     if (!user || user.resetPasswordTokenExpiresAt < new Date()) {
       throw new Error('Token inválido ou expirado');
     }
-    const passwordHash = compareSync(password, user.senha) ? user.senha : await bcrypt.hashSync(user.senha, 8);
+    const passwordHash = await bcrypt.hashSync(user.senha, 8);
     await this.prismaService.getClient().client.update({
-      where: { id: user.id },
-      data: { senha: passwordHash, resetPasswordToken: null, resetPasswordTokenExpiresAt: null },
+      where: { email: user.email,  },
+      data: { senha: passwordHash, resetPasswordToken: "0", resetPasswordTokenExpiresAt: new Date(Date.now()) },
     });
     return { message: 'Senha redefinida com sucesso' };
   }
