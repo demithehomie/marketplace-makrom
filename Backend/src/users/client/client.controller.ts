@@ -44,9 +44,6 @@ export class ClientController {
                 cidade: string,
                 estado: string,
                 cep: number,
-                twoFactorSecret: string,
-                twoFactorEnabled: boolean,
-                verified: boolean,
             }) 
         {
         const client = await this.prisma.getClient().client.create({
@@ -66,10 +63,6 @@ export class ClientController {
                 cidade: data.cidade,
                 estado: data.estado,
                 cep: data.cep,
-                twoFactorSecret: data.twoFactorSecret,
-                twoFactorEnabled: data.twoFactorEnabled,
-                verified: data.verified,
-
             },
         });
         return client;
@@ -106,9 +99,6 @@ export class ClientController {
                 cidade: string,
                 estado: string,
                 cep: number,
-                twoFactorSecret: string,
-                twoFactorEnabled: boolean,
-                verified: boolean,
             })
         {
         const client = await this.prisma.getClient().client.update({
@@ -131,9 +121,6 @@ export class ClientController {
                 cidade: data.cidade,
                 estado: data.estado,
                 cep: data.cep,
-                twoFactorSecret: data.twoFactorSecret,
-                twoFactorEnabled: data.twoFactorEnabled,
-                verified: data.verified,
             },
         });
         return client;
