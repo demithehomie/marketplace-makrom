@@ -30,7 +30,17 @@ export class EmailService {
   }
 
   async sendTwoFactorToken(email, token) {
-    const html = `<html><body><p>Seu código de verificação em dois fatores é: ${token}</p></body></html>`;
+    const templatePath = path.join(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      '..',
+      'templates',
+      'email.hbs',
+    );
+    const template = fs.readFileSync(templatePath, 'utf-8');
+    const html = this.compileTemplate(template, { code: token });
     const options = {
       from: EMAIL_USER,
       to: email,

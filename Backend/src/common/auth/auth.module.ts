@@ -12,6 +12,7 @@ import { EmailService } from './email.service';
 import { AuthController } from './auth.controller';
 import { TwoFactorAuthService } from './two-factor.auth.service';
 import { PasswordResetController } from './password-reset.controller';
+import { SmsService } from './sms.service';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { PasswordResetController } from './password-reset.controller';
     PrismaService,
     TokenController,
     EmailService,
+    SmsService,
     TwoFactorAuthService,
   ],
   exports: [AuthService, JwtModule, TokenModule],
