@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { AuthService } from 'src/common/auth/auth.service';
 import { JwtAuthGuard } from 'src/common/auth/jwt-auth.guard';
+import * as dotenv from 'dotenv';
 
 @Controller('client')
 
@@ -11,8 +12,10 @@ export class ClientController {
     
     constructor(
         private readonly prisma: PrismaService,
-        private authService: AuthService
-    ) {}
+        private authService: AuthService,
+    ) {
+        dotenv.config();
+    }
 
     
     @UseGuards(JwtAuthGuard)
@@ -138,4 +141,5 @@ export class ClientController {
         async login(@Request() req) {
         return this.authService.login(req.client);    
     }
+
 }

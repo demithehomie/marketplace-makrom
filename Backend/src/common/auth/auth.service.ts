@@ -1,16 +1,19 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from '../prisma/prisma.service';
 import { TokenController } from '../token/token.controller';
+import { PrismaService } from '../prisma/prisma.service';
+import * as dotenv from 'dotenv';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-    private token: TokenController,
-  ) {}
+    private token: TokenController
+  ) {
+    dotenv.config();
+  }
 
   async validateClient(email: string, senha: string): Promise<any> {
     const client = await this.prisma.getClient().client.findUnique({ where: { email } });
@@ -44,5 +47,4 @@ export class AuthService {
       access_token: token,
     };
   }
-
 }
