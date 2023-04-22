@@ -11,6 +11,7 @@ import { LocalStrategy } from './local.strategy';
 import { EmailService } from './email.service';
 import { AuthController } from './auth.controller';
 import { TwoFactorAuthService } from './two-factor.auth.service';
+import { PasswordResetController } from './password-reset.controller';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TwoFactorAuthService } from './two-factor.auth.service';
   ],
   controllers: [
     AuthController,
+    PasswordResetController
   ],
   providers: [
     AuthService,
