@@ -141,5 +141,4 @@ export class ClientController {
         async login(@Request() req) {
         return this.authService.login(req.client);    
     }
-
 }

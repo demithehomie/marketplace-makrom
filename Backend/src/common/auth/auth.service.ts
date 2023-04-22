@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { TokenController } from '../token/token.controller';
 import { PrismaService } from '../prisma/prisma.service';
-import * as dotenv from 'dotenv';
 
 @Injectable()
 export class AuthService {
@@ -11,9 +10,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private token: TokenController
-  ) {
-    dotenv.config();
-  }
+  ) {}
 
   async validateClient(email: string, senha: string): Promise<any> {
     const client = await this.prisma.getClient().client.findUnique({ where: { email } });
@@ -39,10 +36,10 @@ export class AuthService {
     return provider;
   }
 
-  async login(user: any) {
-    const payload = { sub: user.id, email: user.email };
+  async login(usuario: any) {
+    const payload = { sub: usuario.id, email: usuario.email };
     const token = this.jwtService.sign(payload)
-    this.token.saveToken(token, user.email)
+    this.token.saveToken(token, usuario.email)
     return {
       access_token: token,
     };

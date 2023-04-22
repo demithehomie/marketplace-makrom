@@ -17,45 +17,45 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
   async login(@Request() req) {
-    const { user } = req;
-    const token = await this.authService.login(user);
+    const { usuario } = req;
+    const token = await this.authService.login(usuario);
     return { token };
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('auth/me')
   async me(@Request() req) {
-    return req.user;
+    return req.usuario;
   }
 
   @UseGuards(AuthGuard('jwt'))
   @UseGuards(TwoFactorAuthGuard)
   @Post('auth/2fa')
   async twoFactorAuth(@Request() req) {
-    const { user } = req;
-    const token = await this.authService.login(user);
+    const { usuario } = req;
+    const token = await this.authService.login(usuario);
     return { token };
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('auth/2fa/enable')
   async enableTwoFactorAuth(@Request() req) {
-    const { user } = req;
+    const { usuario } = req;
     const secret = await this.twoFactorAuthService.generateSecret();
     await this.prismaService.getClient().client.update({
-      where: { id: user.id },
+      where: { id: usuario.id },
       data: { twoFactorSecret: secret, twoFactorEnabled: true },
     });
-    await this.emailService.sendTwoFactorToken(user.email, secret);
+    await this.emailService.sendTwoFactorToken(usuario.email, secret);
     return { message: 'Código de verificação enviado por email' };
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('auth/2fa/disable')
   async disableTwoFactorAuth(@Request() req) {
-    const { user } = req;
+    const { usuario } = req;
     await this.prismaService.getClient().client.update({
-      where: { id: user.id },
+      where: { id: usuario.id },
       data: { twoFactorSecret: null, twoFactorEnabled: false },
     });
     return { message: 'Verificação em dois fatores desativada' };
