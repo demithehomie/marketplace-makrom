@@ -1,4 +1,5 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './common/auth/auth.module';
@@ -13,6 +14,10 @@ import { IonicCorsMiddleware } from 'middlewares/ionic-cors.middleware';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env'],
+      isGlobal: true,
+    }),
     AuthModule, 
     ClientModule, 
     ProviderModule, 

@@ -4,7 +4,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { AuthService } from 'src/common/auth/auth.service';
 import { JwtAuthGuard } from 'src/common/auth/jwt-auth.guard';
-import { EmailService } from 'src/common/2fa/email/email.service';
 import * as dotenv from 'dotenv';
 
 @Controller('client')
@@ -14,7 +13,6 @@ export class ClientController {
     constructor(
         private readonly prisma: PrismaService,
         private authService: AuthService,
-        private emailService: EmailService
     ) {
         dotenv.config();
     }
@@ -46,6 +44,9 @@ export class ClientController {
                 cidade: string,
                 estado: string,
                 cep: number,
+                twoFactorSecret: string,
+                twoFactorEnabled: boolean,
+                verified: boolean,
             }) 
         {
         const client = await this.prisma.getClient().client.create({
@@ -65,6 +66,10 @@ export class ClientController {
                 cidade: data.cidade,
                 estado: data.estado,
                 cep: data.cep,
+                twoFactorSecret: data.twoFactorSecret,
+                twoFactorEnabled: data.twoFactorEnabled,
+                verified: data.verified,
+
             },
         });
         return client;
@@ -101,6 +106,9 @@ export class ClientController {
                 cidade: string,
                 estado: string,
                 cep: number,
+                twoFactorSecret: string,
+                twoFactorEnabled: boolean,
+                verified: boolean,
             })
         {
         const client = await this.prisma.getClient().client.update({
@@ -123,6 +131,9 @@ export class ClientController {
                 cidade: data.cidade,
                 estado: data.estado,
                 cep: data.cep,
+                twoFactorSecret: data.twoFactorSecret,
+                twoFactorEnabled: data.twoFactorEnabled,
+                verified: data.verified,
             },
         });
         return client;
@@ -142,16 +153,6 @@ export class ClientController {
     @Post('login')
         async login(@Request() req) {
         return this.authService.login(req.client);    
-    }
-
-    @Post('email-token')
-        async emailtoken(@Body()email: string) {
-        return this.authService.enviarTokenPorEmail(email);    
-    }
-
-    @Post('email-service')
-        async emailservice(@Body()to: string, @Body()subject: string, @Body()html: string) {
-        return this.emailService.sendEmail(to, subject, html);    
     }
 
 }

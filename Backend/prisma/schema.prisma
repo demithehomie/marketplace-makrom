@@ -27,6 +27,11 @@ model Client {
   cidade String
   estado String
   cep Int
+  twoFactorSecret String
+  twoFactorEnabled Boolean
+  verified Boolean
+  resetPasswordToken String  @default("0")
+  resetPasswordTokenExpiresAt DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
