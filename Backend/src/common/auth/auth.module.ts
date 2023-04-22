@@ -11,6 +11,7 @@ import { LocalStrategy } from './local.strategy';
 import { EmailService } from './email.service';
 import { AuthController } from './auth.controller';
 import { TwoFactorAuthService } from './two-factor.auth.service';
+import { PasswordResetController } from './password-reset.controller';
 
 @Module({
   imports: [
@@ -18,12 +19,10 @@ import { TwoFactorAuthService } from './two-factor.auth.service';
     TokenModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '600s'}
+      signOptions: { expiresIn: '600s' },
     }),
   ],
-  controllers: [
-    AuthController,
-  ],
+  controllers: [AuthController, PasswordResetController],
   providers: [
     AuthService,
     LocalStrategy,
@@ -31,12 +30,8 @@ import { TwoFactorAuthService } from './two-factor.auth.service';
     PrismaService,
     TokenController,
     EmailService,
-    TwoFactorAuthService
+    TwoFactorAuthService,
   ],
-  exports: [
-    AuthService,
-    JwtModule,
-    TokenModule
-  ],
+  exports: [AuthService, JwtModule, TokenModule],
 })
 export class AuthModule {}
