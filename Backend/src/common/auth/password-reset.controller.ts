@@ -28,15 +28,15 @@ export class PasswordResetController {
   }
 
   @Post('auth/password-reset/confirm')
-  async confirmPasswordReset(@Body() { token, password }) {
-    const user = await this.prismaService.getClient().client.findUnique({ where: { resetPasswordToken: token } });
+  async confirmPasswordReset(@Body() { resetPasswordToken, token, password }) {
+    const user = await this.prismaService.getClient().client.findUnique({ where: { resetPasswordToken } });
     if (!user || user.resetPasswordTokenExpiresAt < new Date()) {
       throw new Error('Token inválido ou expirado');
     }
     const passwordHash = compareSync(password, user.senha) ? user.senha : await bcrypt.hashSync(user.senha, 8);
     await this.prismaService.getClient().client.update({
       where: { id: user.id },
-      data: { password: passwordHash, resetPasswordToken: null, resetPasswordTokenExpiresAt: null },
+      data: { senha: passwordHash, resetPasswordToken: null, resetPasswordTokenExpiresAt: null },
     });
     return { message: 'Senha redefinida com sucesso' };
   }
