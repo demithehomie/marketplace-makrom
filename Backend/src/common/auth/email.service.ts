@@ -3,7 +3,11 @@ import * as nodemailer from 'nodemailer';
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import * as path from 'path';
+
 require('dotenv').config();
+const EMAIL_USER = process.env.EMAIL_USER
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD
+
 @Injectable()
 export class EmailService {
   constructor() {}
@@ -19,8 +23,8 @@ export class EmailService {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        user: EMAIL_USER,
+        pass: EMAIL_PASSWORD,
       },
     });
     return await transporter.sendMail(options);
