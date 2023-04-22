@@ -1,8 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import * as handlebars from 'handlebars';
+import * as fs from 'fs';
+import * as path from 'path';
+require('dotenv').config();
 @Injectable()
 export class EmailService {
   constructor() {}
+
+  private compileTemplate(template: string, context: object): string {
+    const compiledTemplate = handlebars.compile(template);
+    return compiledTemplate(context);
+  }
 
   async sendEmail(options) {
     const transporter = nodemailer.createTransport({
@@ -10,8 +19,8 @@ export class EmailService {
       port: 465,
       secure: true,
       auth: {
-        user: 'allafsendmail@gmail.com',
-        pass: 'uvufcxabcajebfjj',
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
     return await transporter.sendMail(options);
@@ -20,7 +29,7 @@ export class EmailService {
   async sendTwoFactorToken(email, token) {
     const html = `<html><body><p>Seu código de verificação em dois fatores é: ${token}</p></body></html>`;
     const options = {
-      from: 'allafsendmail@gmail.com',
+      from: process.env.EMAIL_USER,
       to: email,
       subject: 'Seu código de verificação em dois fatores',
       html,
@@ -29,14 +38,23 @@ export class EmailService {
   }
 
   async sendResetPasswordToken(email, token) {
+    const templatePath = path.join(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      '..',
+      'templates',
+      'email.hbs',
+    );
+    const template = fs.readFileSync(templatePath, 'utf-8');
+    const html = this.compileTemplate(template, { code: token });
+
     const options = {
-      from: 'allafsendmail@gmail.com',
+      from: process.env.EMAIL_USER,
       to: email,
       subject: 'Redefinir senha',
-      template: 'email',
-      context: {
-        code: token,
-      },
+      html,
     };
     return await this.sendEmail(options);
   }
