@@ -22,14 +22,7 @@ import { PasswordResetController } from './password-reset.controller';
       signOptions: { expiresIn: '600s' },
     }),
   ],
-<<<<<<< HEAD
   controllers: [AuthController, PasswordResetController],
-=======
-  controllers: [
-    AuthController,
-    PasswordResetController
-  ],
->>>>>>> 38d88457d8705c0056b0b3ab788c3f5396ca3748
   providers: [
     AuthService,
     LocalStrategy,
