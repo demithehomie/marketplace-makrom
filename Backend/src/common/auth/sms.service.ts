@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { Sms } from './sms';
 
 require('dotenv').config();
 const HASH_SMS_MOBILE = process.env.HASH_SMS_MOBILE;
