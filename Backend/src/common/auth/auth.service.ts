@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { TokenController } from '../token/token.controller';
@@ -9,7 +13,7 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-    private token: TokenController
+    private token: TokenController,
   ) {}
 
   async validateClient(email: string, senha: string): Promise<any> {
@@ -17,22 +21,24 @@ export class AuthService {
       where: { email },
       select: { id: true, email: true, senha: true },
     });
-  
+
     if (!client) {
       throw new UnauthorizedException();
     }
-  
+
     const isValidPassword = await bcrypt.compare(senha, client.senha);
-  
+
     if (!isValidPassword) {
       throw new UnauthorizedException();
     }
-  
+
     return { id: client.id, email: client.email };
   }
-  
+
   async validateProvider(email: string, senha: string): Promise<any> {
-    const provider = await this.prisma.getClient().provider.findUnique({ where: { email } });
+    const provider = await this.prisma
+      .getClient()
+      .provider.findUnique({ where: { email } });
     if (!provider) {
       throw new UnauthorizedException();
     }
@@ -44,16 +50,14 @@ export class AuthService {
   }
 
   async login(usuario: any) {
-    if (!usuario || !usuario.id) {
+    if (!usuario || !usuario.email || !usuario.senha) {
       throw new BadRequestException('Dados de login inválidos');
     }
     const payload = { sub: usuario.id, email: usuario.email };
-    const token = this.jwtService.sign(payload)
-    this.token.saveToken(token, usuario.email)
+    const token = this.jwtService.sign(payload);
+    this.token.saveToken(token, usuario.email);
     return {
       access_token: token,
     };
   }
-  
-  
 }
