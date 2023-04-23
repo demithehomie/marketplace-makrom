@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
-import { JwtAuthGuard } from 'src/common/auth/jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('provider')
 export class ProviderController {
@@ -9,7 +9,8 @@ export class ProviderController {
     ) {}
 
     
-    @UseGuards(JwtAuthGuard)
+    
+  @UseGuards(AuthGuard('jwt'))
     @Get('listar')
     async findAll() {
         const providers = await this.prisma.getClient().provider.findMany();
@@ -53,12 +54,14 @@ export class ProviderController {
         return client;
     }
     
+    @UseGuards(AuthGuard('jwt'))
     @Get(':id')
     async findOne(@Param('id') id: string) {
         const client = await this.prisma.getClient().provider.findUnique({ where: { id } });
         return client;
     }
-        
+    
+    @UseGuards(AuthGuard('jwt'))    
     @Put(':id')
     async update(@Param('id') id: string, 
         @Body() 
@@ -99,6 +102,7 @@ export class ProviderController {
         return client;
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
         async delete(@Param('id') id: string) {
         const client = await this.prisma.getClient().provider.delete({

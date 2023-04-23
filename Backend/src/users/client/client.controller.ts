@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
-import { JwtAuthGuard } from 'src/common/auth/jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 import * as dotenv from 'dotenv';
 
 @Controller('client')
@@ -11,7 +11,7 @@ export class ClientController {
     dotenv.config();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get('listar')
   async findAll() {
     const clients = await this.prisma.getClient().client.findMany();
@@ -55,12 +55,14 @@ export class ClientController {
     return client;
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const client = await this.prisma.getClient().client.findUnique({ where: { id } });
     return client;
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -102,6 +104,7 @@ export class ClientController {
     return client;
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   async delete(@Param('id') id: string) {
     const client = await this.prisma.getClient().client.delete({
