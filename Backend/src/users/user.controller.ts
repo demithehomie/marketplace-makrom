@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
-import { JwtAuthGuard } from 'src/common/auth/jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 
@@ -12,7 +12,7 @@ export class UserController {
     dotenv.config();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get('listar')
   async findAll() {
     const users = await this.prisma.getClient().user.findMany();
