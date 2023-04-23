@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
-import { EmailService } from './email.service';
+import { EmailService } from '../email/email.service';
 import { AuthController } from './auth.controller';
 import { TwoFactorAuthService } from './two-factor.auth.service';
 import { PasswordResetController } from './password-reset.controller';
