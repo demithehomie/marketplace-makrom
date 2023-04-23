@@ -2,11 +2,9 @@ import { Body, Controller, Post } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from './email.service';
-import { Sms } from '../sms/sms';
 
 @Controller()
 export class PasswordResetController {
-  private pendingCodes = {};
 
   constructor(
     private readonly emailService: EmailService,
@@ -37,34 +35,15 @@ export class PasswordResetController {
     return { message: 'Email enviado com instruções para redefinir a senha' };
   }
 
-  // @Post('auth/password-reset/email-confirm')
-  // async confirmPasswordReset(@Body() { email, token }) {
-  //   const user = await this.prismaService
-  //     .getClient()
-  //     .user.findUnique({ where: { email: email } });
-  //   if (!user || user.resetPasswordTokenExpiresAt < new Date()) {
-  //     throw new Error('Token inválido ou expirado');
-  //   }
-  //   const passwordHash = await bcrypt.hash(user.senha, 8);
-  //   await this.prismaService.getClient().user.update({
-  //     where: { email: user.email },
-  //     data: {
-  //       senha: passwordHash,
-  //       resetPasswordToken: '0',
-  //       resetPasswordTokenExpiresAt: new Date(Date.now()),
-  //     },
-  //   });
-  //   return { message: 'Senha redefinida com sucesso' };
-  // }
   @Post('auth/password-reset/email-confirm')
-  async confirmPasswordReset(@Body() { email, token }) {
+  async confirmPasswordReset(@Body() { email, token, senha }) {
     const user = await this.prismaService
       .getClient()
       .user.findUnique({ where: { email: email } });
     if (!user || user.resetPasswordToken !== token || user.resetPasswordTokenExpiresAt < new Date()) {
       throw new Error('Token inválido ou expirado');
     }
-    const passwordHash = await bcrypt.hash(user.senha, 8);
+    const passwordHash = await bcrypt.hash( senha, 8);
     await this.prismaService.getClient().user.update({
       where: { email: email },
       data: {
