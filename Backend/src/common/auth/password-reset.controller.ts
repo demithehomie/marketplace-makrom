@@ -40,14 +40,14 @@ export class PasswordResetController {
   }
 
   @Post('auth/password-reset/email-confirm')
-  async confirmPasswordReset(@Body() { token, password }) {
+  async confirmPasswordReset(@Body() { token }) {
     const user = await this.prismaService
       .getClient()
       .client.findUnique({ where: { resetPasswordToken: token } });
     if (!user || user.resetPasswordTokenExpiresAt < new Date()) {
       throw new Error('Token inválido ou expirado');
     }
-    const passwordHash = await bcrypt.hash(password, 8);
+    const passwordHash = await bcrypt.hash(user.senha, 8);
     await this.prismaService.getClient().client.update({
       where: { email: user.email },
       data: {
