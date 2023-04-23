@@ -14,8 +14,8 @@ export class AuthController {
     private readonly prismaService: PrismaService,
   ) {}
 
-  // @UseGuards(AuthGuard('local'))
-  @Post('auth/login')
+  @UseGuards(AuthGuard('local'))
+  @Post('login')
   async login(@Request() req) {
     return this.authService.login(req.user);    
   }

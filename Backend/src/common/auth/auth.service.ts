@@ -1,39 +1,30 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
-import { TokenController } from '../token/token.controller';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService,
-    private token: TokenController,
+    private prisma: PrismaService,
+    private jwtService: JwtService,
   ) {}
 
   async validateUser(email: string, senha: string): Promise<any> {
-    const user = await this.prisma.getClient().user.findUnique({ where: { email } });
-    if (!user) {
-      throw new UnauthorizedException();
+    const user = await this.prisma.getClient().user.findUnique({
+      where: { email },
+    });
+    if (user && bcrypt.compareSync(senha, user.senha)) {
+      return user;
     }
-    const isValidPassword = await bcrypt.compare(senha, user.senha);
-    if (!isValidPassword) {
-      throw new UnauthorizedException();
-    }
-    return user;
+    return null;
   }
-
-  async login(usuario: any) {
-  const payload = { sub: usuario.id, email: usuario.email };
-  const token = this.jwtService.sign(payload);
-  if (usuario.email) {
-    this.token.saveToken(token, usuario.email);
+  
+  async login(user: any) {
+    const payload = { email: user.email, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
-  return {
-    access_token: token,
-  };
-}
-
-
+  
 }
