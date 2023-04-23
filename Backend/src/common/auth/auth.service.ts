@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { TokenController } from '../token/token.controller';
@@ -13,15 +13,22 @@ export class AuthService {
   ) {}
 
   async validateClient(email: string, senha: string): Promise<any> {
-    const client = await this.prisma.getClient().client.findUnique({ where: { email } });
+    const client = await this.prisma.getClient().client.findUnique({
+      where: { email },
+      select: { id: true, email: true, senha: true },
+    });
+  
     if (!client) {
       throw new UnauthorizedException();
     }
+  
     const isValidPassword = await bcrypt.compare(senha, client.senha);
+  
     if (!isValidPassword) {
       throw new UnauthorizedException();
     }
-    return client;
+  
+    return { id: client.id, email: client.email };
   }
   
   async validateProvider(email: string, senha: string): Promise<any> {
@@ -37,6 +44,9 @@ export class AuthService {
   }
 
   async login(usuario: any) {
+    if (!usuario || !usuario.id) {
+      throw new BadRequestException('Dados de login inválidos');
+    }
     const payload = { sub: usuario.id, email: usuario.email };
     const token = this.jwtService.sign(payload)
     this.token.saveToken(token, usuario.email)
@@ -44,4 +54,6 @@ export class AuthService {
       access_token: token,
     };
   }
+  
+  
 }

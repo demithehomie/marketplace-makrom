@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, BadRequestException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from 'src/common/prisma/prisma.service';
@@ -136,9 +136,16 @@ export class ClientController {
         return client;
     }
     
-    @UseGuards(AuthGuard('local'))
+    // @UseGuards(AuthGuard('local'))
     @Post('login')
-        async login(@Request() req) {
-        return this.authService.login(req.client);    
+    async login(@Request() req) {
+      try {
+        const { usuario } = req;
+        const token = await this.authService.login(usuario);
+        return { token };
+      } catch (error) {
+        throw new BadRequestException(error.message);
+      }
     }
+    
 }
