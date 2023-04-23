@@ -1,8 +1,8 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { TokenController } from '../token/token.controller';
 import { PrismaService } from '../prisma/prisma.service';
+import { TokenController } from '../token/token.controller';
 
 @Injectable()
 export class AuthService {
@@ -25,15 +25,15 @@ export class AuthService {
   }
 
   async login(usuario: any) {
-    if (!usuario || !usuario.email || !usuario.senha) {
-      throw new BadRequestException('Dados de login inválidos');
-    }
-    const payload = { sub: usuario.id, email: usuario.email };
-    const token = this.jwtService.sign(payload);
+  const payload = { sub: usuario.id, email: usuario.email };
+  const token = this.jwtService.sign(payload);
+  if (usuario.email) {
     this.token.saveToken(token, usuario.email);
-    return {
-      access_token: token,
-    };
-    
   }
+  return {
+    access_token: token,
+  };
+}
+
+
 }

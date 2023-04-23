@@ -1,6 +1,6 @@
-// export type Sms = {
-//   hash: string;
-//   mensagem: string;
-//   acao: string;
-//   numero: Array<string>;
-// };
+export type Sms = {
+  hash: string;
+  mensagem: string;
+  acao: string;
+  numero: Array<string>;
+};

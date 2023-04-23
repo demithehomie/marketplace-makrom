@@ -8,12 +8,11 @@ import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
-// import { EmailService } from '../email/email.service';
-// import { AuthController } from './auth.controller';
-// import { TwoFactorAuthService } from './two-factor.auth.service';
-// import { PasswordResetController } from './password-reset.controller';
-// import { SmsService } from './sms.service';
-// import { LocalAuthGuard } from './local-auth.guard';
+import { EmailService } from '../email/email.service';
+import { AuthController } from './auth.controller';
+import { TwoFactorAuthService } from '../2fa/two-factor.auth.service';
+import { PasswordResetController } from '../email/password-reset.controller';
+import { SmsService } from '../sms/sms.service';
 
 @Module({
   imports: [
@@ -25,8 +24,8 @@ import { LocalStrategy } from './local.strategy';
     })
   ],
   controllers: [
-    // AuthController, 
-    // PasswordResetController
+    AuthController, 
+    PasswordResetController
 ],
   providers: [
     AuthService,
@@ -34,10 +33,9 @@ import { LocalStrategy } from './local.strategy';
     JwtStrategy,
     PrismaService,
     TokenController,
-    // EmailService,
-    // SmsService,
-    // TwoFactorAuthService,
-    // LocalAuthGuard
+    EmailService,
+    SmsService,
+    TwoFactorAuthService
   ],
   exports: [AuthService, JwtModule, TokenModule],
 })
