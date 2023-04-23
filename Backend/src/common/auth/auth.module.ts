@@ -13,6 +13,7 @@ import { AuthController } from './auth.controller';
 import { TwoFactorAuthService } from './two-factor.auth.service';
 import { PasswordResetController } from './password-reset.controller';
 import { SmsService } from './sms.service';
+import { LocalAuthGuard } from './local-auth.guard';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { SmsService } from './sms.service';
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '600s' },
-    }),
+    })
   ],
   controllers: [AuthController, PasswordResetController],
   providers: [
@@ -33,6 +34,7 @@ import { SmsService } from './sms.service';
     EmailService,
     SmsService,
     TwoFactorAuthService,
+    LocalAuthGuard
   ],
   exports: [AuthService, JwtModule, TokenModule],
 })

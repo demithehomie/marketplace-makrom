@@ -1,15 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  UseGuards,
-  Request,
-  BadRequestException,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, BadRequestException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from 'src/common/prisma/prisma.service';

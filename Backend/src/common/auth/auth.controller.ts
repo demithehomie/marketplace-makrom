@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards, Request,Get } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Request, Get, BadRequestException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { TwoFactorAuthGuard } from './two-factor-auth.guard';
@@ -16,9 +16,16 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
-  async login(@Request() req) {
-    const token = await this.authService.login(req);
-    return { token };
+  async login(@Body() usuario: any) {
+    try {
+      if (!usuario || !usuario.email || !usuario.senha) {
+        throw new BadRequestException('Dados de login inválidos');
+      }
+      const token = await this.authService.login(usuario);
+      return token ;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @UseGuards(AuthGuard('jwt'))
