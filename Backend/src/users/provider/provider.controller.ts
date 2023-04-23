@@ -1,15 +1,11 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from 'src/common/prisma/prisma.service';
-import { AuthService } from 'src/common/auth/auth.service';
 import { JwtAuthGuard } from 'src/common/auth/jwt-auth.guard';
 
 @Controller('provider')
 export class ProviderController {
        constructor(
         private readonly prisma: PrismaService,
-        private authService: AuthService
     ) {}
 
     
@@ -24,31 +20,25 @@ export class ProviderController {
     async create(
         @Body() 
             data: { 
-                usuario: string,
-                senha: string,
                 nome: string,
                 razao_social: string,
                 cnpj: string,
-                email: string,
-                telefone: number,
-                celular: number,
+                telefone: string,
+                celular: string,
                 endereco: string,
                 numero: number,
                 bairro: string,
                 complemento: string,
                 cidade: string,
                 estado: string,
-                cep: number,
+                cep: string,
             }) 
         {
         const client = await this.prisma.getClient().provider.create({
             data: {
-                usuario: data.usuario,
-                senha: bcrypt.hashSync(data.senha, 8),
                 nome: data.nome,
                 razao_social: data.razao_social,
                 cnpj: data.cnpj,
-                email: data.email,
                 telefone: data.telefone,
                 celular: data.celular,
                 endereco: data.endereco,
@@ -65,48 +55,36 @@ export class ProviderController {
     
     @Get(':id')
     async findOne(@Param('id') id: string) {
-        const client = await this.prisma.getClient().provider.findUnique({ where: { id: parseInt(id, 10) } });
+        const client = await this.prisma.getClient().provider.findUnique({ where: { id } });
         return client;
     }
-    
-    @Get('email/:email')
-    async findByEmail(@Param('email') email: string) {
-        const client = await this.prisma.getClient().provider.findUnique({ where: { email } });
-        return client ;
-    }
-    
+        
     @Put(':id')
     async update(@Param('id') id: string, 
         @Body() 
             data: { 
-                usuario: string,
-                senha: string,
                 nome: string,
                 razao_social: string,
                 cnpj: string,
-                email: string,
-                telefone: number,
-                celular: number,
+                telefone: string,
+                celular: string,
                 endereco: string,
                 numero: number,
                 bairro: string,
                 complemento: string,
                 cidade: string,
                 estado: string,
-                cep: number,
+                cep: string,
             })
         {
         const client = await this.prisma.getClient().provider.update({
             where: {
-            id: parseInt(id),
+            id: id,
             },
             data: {
-                usuario: data.usuario,
-                senha: bcrypt.hashSync(data.senha, 8),
                 nome: data.nome,
                 razao_social: data.razao_social,
                 cnpj: data.cnpj,
-                email: data.email,
                 telefone: data.telefone,
                 celular: data.celular,
                 endereco: data.endereco,
@@ -125,15 +103,9 @@ export class ProviderController {
         async delete(@Param('id') id: string) {
         const client = await this.prisma.getClient().provider.delete({
             where: {
-            id: parseInt(id),
+            id: id,
             },
         });
         return client;
-    }
-    
-    @UseGuards(AuthGuard('local'))
-    @Post('login')
-        async login(@Request() req) {
-        return this.authService.login(req.client);    
     }
 }

@@ -19,7 +19,7 @@ export class TwoFactorAuthService {
   }
 
   async verifyToken(email: string, token: string) {
-    const user = await this.prisma.getClient().client.findUnique({ where: { email } });
+    const user = await this.prisma.getClient().user.findUnique({ where: { email } });
     if (!user) {
       throw new UnauthorizedException();
     }

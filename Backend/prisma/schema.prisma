@@ -10,49 +10,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Client {
+model User {
   id                          Int      @id @default(autoincrement())
   usuario                     String   @unique
+  email                       String   @unique
   senha                       String
+  twoFactorSecret             String   @default("0")
+  twoFactorEnabled            Boolean  @default(false)
+  verified                    Boolean  @default(false)
+  resetPasswordToken          String   @default("0")
+  resetPasswordTokenExpiresAt DateTime @default(now())
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+}
+
+model Client {
+  id             String       @id @default(uuid())
+  role        String   @default("client")
   nome                        String
   cpf                         String
-  email                       String   @unique
-  telefone                    Int
-  celular                     Int
-  nascismento                 Int
+  telefone                    String
+  celular                     String
+  nascismento                 String
   endereco                    String
   numero                      Int
   bairro                      String
   complemento                 String
   cidade                      String
   estado                      String
-  cep                         Int
-  twoFactorSecret             String   @default("0")
-  twoFactorEnabled            Boolean  @default(false)
-  verified                    Boolean  @default(false)
-  resetPasswordToken          String   @unique @default("0")
-  resetPasswordTokenExpiresAt DateTime @default(now())
-  createdAt                   DateTime @default(now())
-  updatedAt                   DateTime @updatedAt
+  cep                         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Provider {
-  id           Int      @id @default(autoincrement())
-  usuario      String   @unique
-  senha        String
+  id             String       @id @default(uuid())
+  role        String   @default("provider")
   nome         String
   razao_social String
   cnpj         String   @unique
-  email        String   @unique
-  telefone     Int
-  celular      Int
+  telefone     String
+  celular      String
   endereco     String
   numero       Int
   bairro       String
   complemento  String
   cidade       String
   estado       String
-  cep          Int
+  cep          String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

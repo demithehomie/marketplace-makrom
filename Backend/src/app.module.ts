@@ -11,6 +11,7 @@ import { PaymentsModule } from './asaas/payments/payments.module';
 import { SubscriptionsModule } from './asaas/subscriptions/subscriptions.module';
 import { PrismaService } from './common/prisma/prisma.service';
 import { IonicCorsMiddleware } from 'middlewares/ionic-cors.middleware';
+import { UserModule } from './users/user.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { IonicCorsMiddleware } from 'middlewares/ionic-cors.middleware';
       isGlobal: true,
     }),
     AuthModule, 
+    UserModule,
     ClientModule, 
     ProviderModule, 
     CustomersModule,

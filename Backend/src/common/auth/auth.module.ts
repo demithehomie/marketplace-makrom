@@ -8,10 +8,11 @@ import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
-import { EmailService } from './email.service';
+import { EmailService } from '../email/email.service';
 import { AuthController } from './auth.controller';
-import { TwoFactorAuthService } from './two-factor.auth.service';
-import { PasswordResetController } from './password-reset.controller';
+import { TwoFactorAuthService } from '../2fa/two-factor.auth.service';
+import { PasswordResetController } from '../email/password-reset.controller';
+import { SmsService } from '../sms/sms.service';
 
 @Module({
   imports: [
@@ -20,9 +21,12 @@ import { PasswordResetController } from './password-reset.controller';
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '600s' },
-    }),
+    })
   ],
-  controllers: [AuthController, PasswordResetController],
+  controllers: [
+    AuthController, 
+    PasswordResetController
+],
   providers: [
     AuthService,
     LocalStrategy,
@@ -30,7 +34,8 @@ import { PasswordResetController } from './password-reset.controller';
     PrismaService,
     TokenController,
     EmailService,
-    TwoFactorAuthService,
+    SmsService,
+    TwoFactorAuthService
   ],
   exports: [AuthService, JwtModule, TokenModule],
 })
