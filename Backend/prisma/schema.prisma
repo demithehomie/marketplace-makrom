@@ -18,7 +18,7 @@ model User {
   twoFactorSecret             String   @default("0")
   twoFactorEnabled            Boolean  @default(false)
   verified                    Boolean  @default(false)
-  resetPasswordToken          String   @unique @default("0")
+  resetPasswordToken          String   @default("0")
   resetPasswordTokenExpiresAt DateTime @default(now())
   createdAt                   DateTime @default(now())
   updatedAt                   DateTime @updatedAt

@@ -77,9 +77,6 @@ CREATE UNIQUE INDEX "User_usuario_key" ON "User"("usuario");
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_resetPasswordToken_key" ON "User"("resetPasswordToken");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Provider_cnpj_key" ON "Provider"("cnpj");
 
 -- CreateIndex
