@@ -1,9 +1,9 @@
 import { Body, Controller, Post, UseGuards, Request, Get, BadRequestException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { TwoFactorAuthGuard } from './two-factor-auth.guard';
+import { TwoFactorAuthGuard } from '../2fa/two-factor-auth.guard';
 import { TwoFactorAuthService } from './two-factor.auth.service';
-import { EmailService } from './email.service';
+import { EmailService } from '../email/email.service';
 import { PrismaService } from '../prisma/prisma.service';
 @Controller()
 export class AuthController {
