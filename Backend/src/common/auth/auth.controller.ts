@@ -47,12 +47,12 @@ export class AuthController {
   @Post('auth/2fa/enable')
   async enableTwoFactorAuth(@Request() req) {
     const { user } = req;
-    const secret = await this.twoFactorAuthService.generateSecret();
+    const secret = await this.twoFactorAuthService.generateToken();
     await this.prismaService.getClient().user.update({
       where: { id: user.id },
       data: { twoFactorSecret: secret, twoFactorEnabled: true },
     });
-    await this.emailService.sendTwoFactorToken(user?.email, secret);
+    await this.emailService.sendResetPasswordToken(user?.email, secret);
     return { message: 'Código de verificação enviado por email' };
   }
 
@@ -62,7 +62,7 @@ export class AuthController {
     const { user } = req;
     await this.prismaService.getClient().user.update({
       where: { id: user.id },
-      data: { twoFactorSecret: null, twoFactorEnabled: false },
+      data: { twoFactorSecret: '0', twoFactorEnabled: false },
     });
     return { message: 'Verificação em dois fatores desativada' };
   }
