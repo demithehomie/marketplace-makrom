@@ -20,14 +20,20 @@ export class TwoFactorAuthService {
 
   async verifyToken(email: string, token: string) {
     const user = await this.prisma.getClient().user.findUnique({ where: { email } });
-    if (!user) {
-      throw new UnauthorizedException();
+    if (!user || user.twoFactorSecret !== token) {
+      throw new Error('Token inválido ou expirado');
     }
     await speakeasy.totp.verify({
       secret: user.twoFactorSecret,
       encoding: 'base32',
       token,
       window: 1,
+    });
+    await this.prisma.getClient().user.update({
+      where: { email: email },
+      data: {
+        verified: true,
+      },
     });
     return { message: 'Login verificado com sucesso' };
   }
