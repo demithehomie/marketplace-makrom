@@ -40,7 +40,7 @@ export class AuthController {
   async twoFactorAuth(@Request() req) {
     const { user } = req;
     const token = await this.authService.login(user);
-    return { token };
+    return token ;
   }
 
   @UseGuards(AuthGuard('jwt'))
