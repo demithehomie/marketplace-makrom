@@ -11,10 +11,10 @@ export class TwoFactorAuthService {
     return secret.base32;
   }
 
-  async generateToken(secret: string) {
+  async generateToken() {
     return speakeasy.totp({
-      secret,
-      encoding: 'base32',
+      secret: speakeasy.generateSecret({ length: 20 }).base32,
+      digits: 6,
     });
   }
 
