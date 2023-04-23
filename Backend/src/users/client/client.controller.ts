@@ -149,7 +149,7 @@ export class ClientController {
     return client;
   }
 
-  // @UseGuards(AuthGuard('local'))
+  @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Body() usuario: any) {
     try {
@@ -157,7 +157,7 @@ export class ClientController {
         throw new BadRequestException('Dados de login inválidos');
       }
       const token = await this.authService.login(usuario);
-      return { token };
+      return token ;
     } catch (error) {
       throw new BadRequestException(error.message);
     }

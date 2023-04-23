@@ -17,22 +17,17 @@ export class AuthService {
   ) {}
 
   async validateClient(email: string, senha: string): Promise<any> {
-    const client = await this.prisma.getClient().client.findUnique({
-      where: { email },
-      select: { id: true, email: true, senha: true },
-    });
-
+    const client = await this.prisma
+      .getClient()
+      .client.findUnique({ where: { email } });
     if (!client) {
       throw new UnauthorizedException();
     }
-
     const isValidPassword = await bcrypt.compare(senha, client.senha);
-
     if (!isValidPassword) {
       throw new UnauthorizedException();
     }
-
-    return { id: client.id, email: client.email };
+    return client;
   }
 
   async validateProvider(email: string, senha: string): Promise<any> {
