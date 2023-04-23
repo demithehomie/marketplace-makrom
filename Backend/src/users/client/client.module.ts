@@ -1,21 +1,18 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { AuthModule } from 'src/common/auth/auth.module';
+import { Module } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
-import { TokenModule } from 'src/common/token/token.module';
 import { ClientController } from './client.controller';
-import { EmailService } from 'src/common/auth/email.service';
-import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    forwardRef(() => AuthModule),
-    forwardRef(() => TokenModule)
   ],
-  controllers: [ClientController],
+  controllers: [
+    ClientController
+  ],
   providers: [
-    PrismaService,
-    EmailService
+    PrismaService
   ],
-  exports: [ ]
+  exports: [ 
+    
+  ]
 })
 export class ClientModule {}
