@@ -38,12 +38,14 @@ export class UserController {
     return user;
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.prisma.getClient().user.findUnique({ where: { id: parseInt(id), } });
     return user;
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -67,6 +69,7 @@ export class UserController {
     return user;
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   async delete(@Param('id') id: string) {
     const user = await this.prisma.getClient().user.delete({
