@@ -12,32 +12,16 @@ export class AuthService {
     private token: TokenController,
   ) {}
 
-  async validateClient(email: string, senha: string): Promise<any> {
-    const client = await this.prisma
-      .getClient()
-      .client.findUnique({ where: { email } });
-    if (!client) {
+  async validateUser(email: string, senha: string): Promise<any> {
+    const user = await this.prisma.getClient().user.findUnique({ where: { email } });
+    if (!user) {
       throw new UnauthorizedException();
     }
-    const isValidPassword = await bcrypt.compare(senha, client.senha);
+    const isValidPassword = await bcrypt.compare(senha, user.senha);
     if (!isValidPassword) {
       throw new UnauthorizedException();
     }
-    return client;
-  }
-
-  async validateProvider(email: string, senha: string): Promise<any> {
-    const provider = await this.prisma
-      .getClient()
-      .provider.findUnique({ where: { email } });
-    if (!provider) {
-      throw new UnauthorizedException();
-    }
-    const isValidPassword = await bcrypt.compare(senha, provider.senha);
-    if (!isValidPassword) {
-      throw new UnauthorizedException();
-    }
-    return provider;
+    return user;
   }
 
   async login(usuario: any) {
