@@ -34,13 +34,11 @@ export class AuthController {
     return req.user;
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @UseGuards(TwoFactorAuthGuard)
-  @Post('auth/2fa')
-  async twoFactorAuth(@Request() req) {
-    const { user } = req;
-    const token = await this.authService.login(user);
-    return token ;
+  @Post('login/2fa')
+  async twoFactorAuth(@Body() {email, token}) {
+    const login = await this.twoFactorAuthService.verifyToken(email, token)
+    return login ;
   }
 
   @UseGuards(AuthGuard('jwt'))

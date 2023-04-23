@@ -23,11 +23,12 @@ export class TwoFactorAuthService {
     if (!user) {
       throw new UnauthorizedException();
     }
-    return speakeasy.totp.verify({
+    await speakeasy.totp.verify({
       secret: user.twoFactorSecret,
       encoding: 'base32',
       token,
       window: 1,
     });
+    return { message: 'Login verificado com sucesso' };
   }
 }
