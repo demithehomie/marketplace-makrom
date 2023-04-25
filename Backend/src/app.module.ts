@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer, RequestMethod  } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,8 +12,12 @@ import { SubscriptionsModule } from './asaas/subscriptions/subscriptions.module'
 import { PrismaService } from './common/prisma/prisma.service';
 import { IonicCorsMiddleware } from 'middlewares/ionic-cors.middleware';
 import { UserModule } from './users/user.module';
+import { Roles } from './common/enum/roles.enum';
+import { RolesGuard } from './common/auth/roles.guard';
+import { Permissions } from './common/enum/permissions.enum';
 
 @Module({
+  
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env'],
@@ -45,5 +49,13 @@ import { UserModule } from './users/user.module';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(IonicCorsMiddleware).forRoutes('*');
+    consumer.apply((req, res, next) => {
+      console.log('Request', req.method, req.url);
+      next(); 
+    }).forRoutes('*');
+    consumer.apply((req, res, next) => {
+      req.user = { id: '1', roles: [Roles.ADMIN]};
+      next();
+    }).forRoutes('/api/*');
   }
 }
