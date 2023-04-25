@@ -12,6 +12,8 @@ import { SubscriptionsModule } from './asaas/subscriptions/subscriptions.module'
 import { PrismaService } from './common/prisma/prisma.service';
 import { IonicCorsMiddleware } from 'middlewares/ionic-cors.middleware';
 import { UserModule } from './users/user.module';
+import { ProductsController } from './products/products.controller';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   
@@ -27,10 +29,12 @@ import { UserModule } from './users/user.module';
     CustomersModule,
     PaymentLinksModule, 
     PaymentsModule, 
-    SubscriptionsModule
+    ProductsModule,
+    SubscriptionsModule, 
   ],
   controllers: [
     AppController,
+    ProductsController,
   ],
   providers: [
     AppService,
